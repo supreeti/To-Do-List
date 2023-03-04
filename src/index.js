@@ -90,14 +90,16 @@ clearBtn.addEventListener('click', (e) => {
   for (let k = 0; k < myNewArray.length; k += 1) {
     if (myNewArray[k].completed === true) {
       const indexRem = parseInt(myNewArray[k].index, 1);
-      newupdateArray.push(indexRem);
+      newIndexToRemove.push(indexRem);
     }
   }
-  const addData = (data) => {
-    task.addData(data);
-    updateData();
-  };
+  task.removeData(newIndexToRemove);
+  updateData();
 });
+const addData = (data) => {
+  task.addData(data);
+  updateData();
+};
 
 inputDo.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
