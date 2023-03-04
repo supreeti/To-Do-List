@@ -7,6 +7,8 @@ import './refresh.png';
 const listContainer = document.querySelector('.list-container');
 const inputDo = document.getElementById('todo-input');
 
+// class
+
 const task = new DoTask();
 const updateData = () => {
   let html = '';
@@ -86,10 +88,10 @@ const clearBtn = document.querySelector('.clear');
 clearBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const myNewArray = task.tasks;
-  const newupdateArray = [];
+  const newIndexToRemove = [];
   for (let k = 0; k < myNewArray.length; k += 1) {
     if (myNewArray[k].completed === true) {
-      const indexRem = parseInt(myNewArray[k].index, 1);
+      const indexRem = parseInt(myNewArray[k].index, 10);
       newIndexToRemove.push(indexRem);
     }
   }
@@ -108,4 +110,5 @@ inputDo.addEventListener('keypress', (event) => {
     event.target.value = '';
   }
 });
+
 window.onload = () => updateData();
