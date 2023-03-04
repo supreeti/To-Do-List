@@ -86,20 +86,18 @@ const clearBtn = document.querySelector('.clear');
 clearBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const myNewArray = task.tasks;
-  const newIndexToRemove = [];
+  const newupdateArray = [];
   for (let k = 0; k < myNewArray.length; k += 1) {
     if (myNewArray[k].completed === true) {
-      const indexRem = parseInt(myNewArray[k].index, 10);
-      newIndexToRemove.push(indexRem);
+      const indexRem = parseInt(myNewArray[k].index, 1);
+      newupdateArray.push(indexRem);
     }
   }
-  task.removeData(newIndexToRemove);
-  updateData();
+  const addData = (data) => {
+    task.addData(data);
+    updateData();
+  };
 });
-const addData = (data) => {
-  task.addData(data);
-  updateData();
-};
 
 inputDo.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
