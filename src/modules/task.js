@@ -1,11 +1,8 @@
-import { toLocalStorage, fromLocalStorage } from './modules/storage.js';
+import { fromLocalStorage } from './storage.js';
 
-const form = document.getElementById('list_form');
-const toAdd = document.getElementById('toAdd');
 const listCont = document.getElementById('list');
-const clearSelected = document.getElementById('clear_selected');
 
-function displayList() {
+export default function displayList() {
   const list = fromLocalStorage();
   listCont.innerHTML = '';
   list.forEach((item, listIndex) => {
@@ -40,6 +37,7 @@ function displayList() {
       } else {
         list[listIndex].completed = false;
         localStorage.setItem('list', JSON.stringify(list));
+        labelElement.style.color = 'green';
         labelElement.style.textDecoration = 'none';
       }
     });
@@ -74,6 +72,37 @@ function displayList() {
       }
     });
 
+    editButton.addEventListener('click', () => {
+      li.style.background = 'yellow';
+      removeButton.style.display = 'block';
+      editButton.style.display = 'none';
+
+      document.addEventListener('click', (e) => {
+        const isClickInside = removeButton.contains(e.target) || editButton.contains(e.target);
+        if (!isClickInside) {
+          removeButton.style.display = 'none';
+          editButton.style.display = 'block';
+        }
+      });
+
+      labelElement.contentEditable = true;
+      labelElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          list[listIndex].description = labelElement.textContent;
+          localStorage.setItem('list', JSON.stringify(list));
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        const isClickInside = li.contains(e.target) || labelElement.contains(e.target);
+        if (!isClickInside) {
+          labelElement.contentEditable = false;
+          li.style.background = 'none';
+        }
+      });
+    });
+
     removeButton.addEventListener('click', () => {
       list.splice(listIndex, 1);
       localStorage.setItem('list', JSON.stringify(list));
@@ -89,30 +118,3 @@ function displayList() {
     listCont.appendChild(li);
   });
 }
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  if (toAdd.value) {
-    toLocalStorage(toAdd.value);
-    displayList();
-  }
-
-  form.reset();
-});
-
-clearSelected.addEventListener('click', () => {
-  let list = JSON.parse(localStorage.getItem('list')) || [];
-  list = list.filter((item) => !item.completed);
-  localStorage.setItem('list', JSON.stringify(list));
-
-  for (let i = 0; i < list.length; i += 1) {
-    const list = JSON.parse(localStorage.getItem('list')) || [];
-    list[i].index = i + 1;
-    localStorage.setItem('list', JSON.stringify(list));
-  }
-
-  displayList();
-});
-
-displayList();
