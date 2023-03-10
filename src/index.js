@@ -1,5 +1,5 @@
 import './style.css';
-import DoTask from './modules/task.js';
+import DoTask from './task.js';
 import './delete.png';
 import './action.png';
 import './refresh.png';
@@ -55,7 +55,7 @@ const updateData = () => {
       mainEdit[index].classList.add('active');
       mainItem[index].classList.add('no-active');
     });
-});
+  });
 };
 const addData = (data) => {
   task.addData(data);
