@@ -50,12 +50,12 @@ const updateData = () => {
   const allAction = document.querySelectorAll('.dot');
   const mainEdit = document.querySelectorAll('.main-edit');
   const mainItem = document.querySelectorAll('.main-item');
-    allAction.forEach((ele, index) => {
+  allAction.forEach((ele, index) => {
     ele.addEventListener('click', () => {
       mainEdit[index].classList.add('active');
       mainItem[index].classList.add('no-active');
     });
-  });   
+});
 };
 const addData = (data) => {
   task.addData(data);
