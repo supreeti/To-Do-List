@@ -1,118 +1,127 @@
-import { toLocalStorage, fromLocalStorage } from './modules/storage.js';
+import './style.css';
+import DoTask from './task.js';
+import './delete.png';
+import './action.png';
+import './refresh.png';
 
-const form = document.getElementById('list_form');
-const toAdd = document.getElementById('toAdd');
-const listCont = document.getElementById('list');
-const clearSelected = document.getElementById('clear_selected');
+const listContainer = document.querySelector('.list-container');
+const inputDo = document.getElementById('todo-input')
 
-function displayList() {
-  const list = fromLocalStorage();
-  listCont.innerHTML = '';
-  list.forEach((item, listIndex) => {
-    const li = document.createElement('li');
-    li.dataset.index = item.index;
-    li.classList.add('list_item');
-
-    const checkLabel = document.createElement('div');
-    checkLabel.classList.add('list_con');
-    li.appendChild(checkLabel);
-
-    const checkBoxElement = document.createElement('input');
-    checkBoxElement.type = 'checkbox';
-    checkBoxElement.checked = item.completed;
-    checkBoxElement.dataset.description = item.description;
-    checkBoxElement.dataset.index = item.index;
-    checkLabel.appendChild(checkBoxElement);
-
-    const labelElement = document.createElement('div');
-    labelElement.classList.add('label');
-    labelElement.textContent = item.description;
-    labelElement.dataset.index = item.index;
-    labelElement.contentEditable = false;
-    checkLabel.appendChild(labelElement);
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (checkBoxElement.checked) {
-        list[listIndex].completed = true;
-        localStorage.setItem('list', JSON.stringify(list));
-        labelElement.style.textDecoration = 'line-through';
-        labelElement.style.color = 'red';
+const task = new DoTask();
+const updateData = () => {
+  const storedTasks = JSON.parse(localStorage.getItem('tasks'));
+  const tasks = storedTasks || task.tasks;
+  let html = '';
+  for (let i = 0; i < task.tasks.length; i += 1) {
+    if (tasks[i].completed === false) {
+      html += `<div class="item">
+      <div class="main-item">
+          <div class="item-detail">
+              <input type="checkbox" class="item-check" id="${tasks[i].index}">
+              <h5 class="descr">${i + 1}.${tasks[i].description}</h5>
+          </div>
+          <img src="./action.png"  alt="" class="dot" disabled>
+      </div>
+      <div class="main-edit">
+          <input type="checkbox" class="checkbox-edit" id="">
+          <input type="text" class="item-input-edit" value="${tasks[i].description}" id="${tasks[i].index}">
+          <img src="./delete.png" alt="" class="delete-item" id="${tasks[i].index}">
+      </div>
+  </div>`;
+    } else {
+      html += `<div class="item">
+      <div class="main-item">
+          <div class="item-detail">
+              <input type="checkbox" class="item-check" id="${tasks[i].index}" checked>
+              <h5 class="descr strike-through">${i + 1}.${tasks[i].description}</h5>
+          </div>
+          <img src="./action.png"  alt="" class="dot" disabled>
+      </div>
+      <div class="main-edit">
+          <input type="checkbox" class="checkbox-edit" id="">
+          <input type="text" class="item-input-edit" value="${tasks[i].description}" id="${tasks[i].index}">
+          <img src="./delete.png" alt="" class="delete-item" id="${tasks[i].index}">
+      </div>
+  </div>`;
+    }
+  }
+  listContainer.innerHTML = html;
+  listContainer.classList.add('text-gray');
+  const allData = document.querySelectorAll('.item-check');
+  const descriptionAll = document.querySelectorAll('.descr');
+  for (let j = 0; j < allData.length; j += 1) {
+    allData[j].addEventListener('change', function () {
+      if (allData[j].checked) {
+        descriptionAll[j].classList.add('strike-through');
+        const btnId = parseInt(this.id, 10);
+        const myArray = tasks;
+        const myObject = myArray.find((obj) => obj.index === btnId);
+        myObject.completed = true;
+        localStorage.setItem('tasks', JSON.stringify(myArray));
       } else {
-        list[listIndex].completed = false;
-        localStorage.setItem('list', JSON.stringify(list));
-        labelElement.style.textDecoration = 'none';
+        descriptionAll[j].classList.remove('strike-through');
+        const btnId = parseInt(this.id, 10);
+        const myArray = tasks;
+        const myObject = myArray.find((obj) => obj.index === btnId);
+        myObject.completed = false;
+        localStorage.setItem('tasks', JSON.stringify(myArray));
       }
     });
-
-    const buttonCont = document.createElement('div');
-    buttonCont.classList.add('button_cont');
-    li.appendChild(buttonCont);
-
-    const editButton = document.createElement('button');
-    editButton.classList.add('edit_btn');
-    editButton.innerHTML = '<i class="fa-solid fa-ellipsis-vertical"></i>';
-    editButton.dataset.index = item.index;
-    buttonCont.appendChild(editButton);
-
-    const removeButton = document.createElement('button');
-    removeButton.classList.add('remove_btn');
-    removeButton.dataset.index = item.index;
-    removeButton.innerHTML = '<i class="fa-sharp fa-solid fa-trash"></i>';
-    buttonCont.appendChild(removeButton);
-
-    checkBoxElement.addEventListener('change', () => {
-      if (checkBoxElement.checked) {
-        list[listIndex].completed = true;
-        localStorage.setItem('list', JSON.stringify(list));
-        labelElement.style.textDecoration = 'line-through';
-        labelElement.style.color = 'red';
-      } else {
-        list[listIndex].completed = false;
-        localStorage.setItem('list', JSON.stringify(list));
-        labelElement.style.color = 'green';
-        labelElement.style.textDecoration = 'none';
-      }
+  }
+  const allAction = document.querySelectorAll('.dot');
+  const mainEdit = document.querySelectorAll('.main-edit');
+  const mainItem = document.querySelectorAll('.main-item');
+  allAction.forEach((ele, index) => {
+    ele.addEventListener('click', () => {
+      mainEdit[index].classList.add('active');
+      mainItem[index].classList.add('no-active');
     });
-
-    removeButton.addEventListener('click', () => {
-      list.splice(listIndex, 1);
-      localStorage.setItem('list', JSON.stringify(list));
-
-      for (let i = 0; i < list.length; i += 1) {
-        list[i].index = i + 1;
-        localStorage.setItem('list', JSON.stringify(list));
-      }
-
-      listCont.removeChild(li);
-    });
-
-    listCont.appendChild(li);
   });
-}
-
-form.addEventListener('submit', (e) => {
+  const itemInputEdit = document.querySelectorAll('.item-input-edit');
+  itemInputEdit.forEach((ele) => {
+    ele.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        task.editLocal(parseInt(event.target.id, 10), event.target.value);
+        updateData();
+      }
+    });
+  });
+  const deleteBtn = document.querySelectorAll('.delete-item');
+  deleteBtn.forEach((ele) => {
+    ele.addEventListener('click', (event) => {
+      const singleElementDelete = [];
+      singleElementDelete.push(parseInt(event.target.id, 10));
+      task.removeData(singleElementDelete);
+      updateData();
+    });
+  });
+};
+const clearBtn = document.querySelector('.clear');
+clearBtn.addEventListener('click', (e) => {
   e.preventDefault();
-
-  if (toAdd.value) {
-    toLocalStorage(toAdd.value);
-    displayList();
+  const myNewArray = task.tasks;
+  const newIndexToRemove = [];
+  for (let k = 0; k < myNewArray.length; k += 1) {
+    if (myNewArray[k].completed === true) {
+      const indexRem = parseInt(myNewArray[k].index, 10);
+      newIndexToRemove.push(indexRem);
+    }
   }
+  task.removeData(newIndexToRemove);
+  updateData();
+});
+const addData = (data) => {
+  task.addData(data);
+  updateData();
+};
 
-  form.reset();
+inputDo.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addData(event.target.value);
+    event.target.value = '';
+  }
 });
 
-clearSelected.addEventListener('click', () => {
-  let list = JSON.parse(localStorage.getItem('list')) || [];
-  list = list.filter((item) => !item.completed);
-  localStorage.setItem('list', JSON.stringify(list));
-
-  for (let i = 0; i < list.length; i += 1) {
-    const list = JSON.parse(localStorage.getItem('list')) || [];
-    list[i].index = i + 1;
-    localStorage.setItem('list', JSON.stringify(list));
-  }
-
-  displayList();
-});
-
-displayList();
+window.onload = () => updateData();
