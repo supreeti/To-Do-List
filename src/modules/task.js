@@ -17,11 +17,6 @@ class DoTask {
     this.updateStorage();
   }
 
-  updateComplete(updateArray) {
-    this.storage.setItem('toDoList', JSON.stringify(updateArray));
-    this.updateStorage();
-  }
-
   removeData(indexRem) {
     for (let i = this.tasks.length - 1; i >= 0; i -= 1) {
       const currentObject = this.tasks[i];

@@ -1,5 +1,5 @@
 import './style.css';
-import DoTask from 'modules/task.js';
+import DoTask from './modules/task.js';
 import './delete.png';
 import './action.png';
 import './refresh.png';

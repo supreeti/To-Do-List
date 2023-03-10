@@ -12,6 +12,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      task: './src/modules/task.js',
+      task: './src/index.js'
     }),
   ],
   output: {
