@@ -1,11 +1,11 @@
 import './style.css';
-import DoTask from './task.js';
+import DoTask from 'modules/task.js';
 import './delete.png';
 import './action.png';
 import './refresh.png';
 
 const listContainer = document.querySelector('.list-container');
-const inputDo = document.getElementById('todo-input')
+const inputDo = document.getElementById('todo-input');
 
 const task = new DoTask();
 const updateData = () => {
@@ -47,56 +47,28 @@ const updateData = () => {
   }
   listContainer.innerHTML = html;
   listContainer.classList.add('text-gray');
-  const allData = document.querySelectorAll('.item-check');
-  const descriptionAll = document.querySelectorAll('.descr');
-  for (let j = 0; j < allData.length; j += 1) {
-    allData[j].addEventListener('change', function () {
-      if (allData[j].checked) {
-        descriptionAll[j].classList.add('strike-through');
-        const btnId = parseInt(this.id, 10);
-        const myArray = tasks;
-        const myObject = myArray.find((obj) => obj.index === btnId);
-        myObject.completed = true;
-        localStorage.setItem('tasks', JSON.stringify(myArray));
-      } else {
-        descriptionAll[j].classList.remove('strike-through');
-        const btnId = parseInt(this.id, 10);
-        const myArray = tasks;
-        const myObject = myArray.find((obj) => obj.index === btnId);
-        myObject.completed = false;
-        localStorage.setItem('tasks', JSON.stringify(myArray));
-      }
-    });
-  }
   const allAction = document.querySelectorAll('.dot');
   const mainEdit = document.querySelectorAll('.main-edit');
   const mainItem = document.querySelectorAll('.main-item');
-  allAction.forEach((ele, index) => {
+    allAction.forEach((ele, index) => {
     ele.addEventListener('click', () => {
       mainEdit[index].classList.add('active');
       mainItem[index].classList.add('no-active');
     });
-  });
-  const itemInputEdit = document.querySelectorAll('.item-input-edit');
-  itemInputEdit.forEach((ele) => {
-    ele.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        task.editLocal(parseInt(event.target.id, 10), event.target.value);
-        updateData();
-      }
-    });
-  });
-  const deleteBtn = document.querySelectorAll('.delete-item');
-  deleteBtn.forEach((ele) => {
-    ele.addEventListener('click', (event) => {
-      const singleElementDelete = [];
-      singleElementDelete.push(parseInt(event.target.id, 10));
-      task.removeData(singleElementDelete);
-      updateData();
-    });
-  });
+  });   
 };
+const addData = (data) => {
+  task.addData(data);
+  updateData();
+};
+
+inputDo.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addData(event.target.value);
+    event.target.value = '';
+  }
+});
 const clearBtn = document.querySelector('.clear');
 clearBtn.addEventListener('click', (e) => {
   e.preventDefault();
@@ -110,18 +82,6 @@ clearBtn.addEventListener('click', (e) => {
   }
   task.removeData(newIndexToRemove);
   updateData();
-});
-const addData = (data) => {
-  task.addData(data);
-  updateData();
-};
-
-inputDo.addEventListener('keypress', (event) => {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    addData(event.target.value);
-    event.target.value = '';
-  }
 });
 
 window.onload = () => updateData();
