@@ -45,14 +45,13 @@ class DoTask {
     objectToUpdate.description = description;
     this.updateComplete(objects);
   }
+
   updateCompleted(index, completed) {
     const objects = this.tasks;
     const objectToUpdate = objects.find((obj) => obj.index === index);
     objectToUpdate.completed = completed;
     this.updateComplete(objects);
-  }
-
-  
+  } 
 }
 
 export default DoTask;
