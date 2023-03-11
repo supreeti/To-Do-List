@@ -1,7 +1,7 @@
 import './style.css';
 import addTodoItem from './modules/addTodoItem.js';
 import deleteTodo from './modules/deleteTodo.js';
-import handleCompleted from './modules/handleCompleted.js';
+import handleCompleted from './modules/taskCompleted.js';
 import {
   addTodo, getTodo, removeTodo, updateTodo,
 } from './modules/storeTodo.js';

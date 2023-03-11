@@ -8,4 +8,4 @@ const handleCompleted = (index) => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-export default handleCompleted;
+export default taskCompleted;
