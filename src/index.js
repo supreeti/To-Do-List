@@ -1,6 +1,7 @@
 import './style.css';
 import addTodoItem from './modules/addTodoItem.js';
 import deleteTodo from './modules/deleteTodo.js';
+import taskCompleted from './modules/taskCompleted.js';
 import {
   addTodo, getTodo, removeTodo, updateTodo,
 } from './modules/storeTodo.js';
@@ -56,6 +57,10 @@ inputField.forEach((todo, index) => {
 window.remove = (index) => {
   deleteTodo(index);
   removeTodo(index);
+};
+
+window.completedTodo = (index) => {
+  taskCompleted(index);
 };
 
 document.getElementById('allCompleted').addEventListener('click', () => {
