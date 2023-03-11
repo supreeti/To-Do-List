@@ -1,87 +1,69 @@
 import './style.css';
-import DoTask from './task.js';
-import './delete.png';
-import './action.png';
-import './refresh.png';
+import addTodoItem from './modules/addTodoItem.js';
+import deleteTodo from './modules/deleteTodo.js';
+import {
+  addTodo, getTodo, removeTodo, updateTodo,
+} from './modules/storeTodo.js';
 
-const listContainer = document.querySelector('.list-container');
-const inputDo = document.getElementById('todo-input');
-
-const task = new DoTask();
-const updateData = () => {
-  const storedTasks = JSON.parse(localStorage.getItem('tasks'));
-  const tasks = storedTasks || task.tasks;
-  let html = '';
-  for (let i = 0; i < task.tasks.length; i += 1) {
-    if (tasks[i].completed === false) {
-      html += `<div class="item">
-      <div class="main-item">
-          <div class="item-detail">
-              <input type="checkbox" class="item-check" id="${tasks[i].index}">
-              <h5 class="descr">${i + 1}.${tasks[i].description}</h5>
-          </div>
-          <img src="./action.png"  alt="" class="dot" disabled>
-      </div>
-      <div class="main-edit">
-          <input type="checkbox" class="checkbox-edit" id="">
-          <input type="text" class="item-input-edit" value="${tasks[i].description}" id="${tasks[i].index}">
-          <img src="./delete.png" alt="" class="delete-item" id="${tasks[i].index}">
-      </div>
-  </div>`;
-    } else {
-      html += `<div class="item">
-      <div class="main-item">
-          <div class="item-detail">
-              <input type="checkbox" class="item-check" id="${tasks[i].index}" checked>
-              <h5 class="descr strike-through">${i + 1}.${tasks[i].description}</h5>
-          </div>
-          <img src="./action.png"  alt="" class="dot" disabled>
-      </div>
-      <div class="main-edit">
-          <input type="checkbox" class="checkbox-edit" id="">
-          <input type="text" class="item-input-edit" value="${tasks[i].description}" id="${tasks[i].index}">
-          <img src="./delete.png" alt="" class="delete-item" id="${tasks[i].index}">
-      </div>
-  </div>`;
-    }
+const display = () => {
+  const todos = getTodo() || [];
+  if (todos) {
+    todos.map((todo) => addTodoItem(todo));
   }
-  listContainer.innerHTML = html;
-  listContainer.classList.add('text-gray');
-  const allAction = document.querySelectorAll('.dot');
-  const mainEdit = document.querySelectorAll('.main-edit');
-  const mainItem = document.querySelectorAll('.main-item');
-  allAction.forEach((ele, index) => {
-    ele.addEventListener('click', () => {
-      mainEdit[index].classList.add('active');
-      mainItem[index].classList.add('no-active');
-    });
-  });
-};
-const addData = (data) => {
-  task.addData(data);
-  updateData();
 };
 
-inputDo.addEventListener('keypress', (event) => {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    addData(event.target.value);
-    event.target.value = '';
-  }
-});
-const clearBtn = document.querySelector('.clear');
-clearBtn.addEventListener('click', (e) => {
+display();
+document.getElementById('form').addEventListener('submit', (e) => {
   e.preventDefault();
-  const myNewArray = task.tasks;
-  const newIndexToRemove = [];
-  for (let k = 0; k < myNewArray.length; k += 1) {
-    if (myNewArray[k].completed === true) {
-      const indexRem = parseInt(myNewArray[k].index, 10);
-      newIndexToRemove.push(indexRem);
-    }
+  const todos = getTodo();
+  const todoInput = document.getElementById('task').value;
+  const todoTask = {
+    index: todos.length,
+    description: todoInput,
+    completed: false,
+  };
+
+  if (todoInput !== '') {
+    addTodoItem(todoTask);
+    addTodo(todoTask);
+    document.getElementById('form').reset();
   }
-  task.removeData(newIndexToRemove);
-  updateData();
 });
 
-window.onload = () => updateData();
+const inputField = document.querySelectorAll('.description');
+
+inputField.forEach((todo, index) => {
+  todo.addEventListener('change', (e) => {
+    const updateInput = e.target.value;
+    const todos = getTodo();
+    todos[index].description = updateInput;
+    updateTodo(index, todos[index].description);
+    window.location.reload();
+  });
+});
+inputField.forEach((todo, index) => {
+  todo.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const updateInput = e.target.value;
+      const todos = getTodo();
+      todos[index].desciption = updateInput;
+      updateTodo(index, todos[index].description);
+      window.location.reload();
+    }
+  });
+});
+
+window.remove = (index) => {
+  deleteTodo(index);
+  removeTodo(index);
+};
+
+document.getElementById('allCompleted').addEventListener('click', () => {
+  const todos = getTodo();
+  const allCompleted = todos.filter((todo) => !todo.completed);
+  allCompleted.forEach((todo, i) => {
+    todo.index = i;
+  });
+  localStorage.setItem('todos', JSON.stringify(allCompleted));
+  window.location.reload();
+});
