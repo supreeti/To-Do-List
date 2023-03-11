@@ -1,6 +1,6 @@
 import { getTodo } from './storeTodo.js';
 
-const handleCompleted = (index) => {
+const taskCompleted = (index) => {
   const completed = document.getElementById(`check${index}`).toggleAttribute('checked');
   const todos = getTodo();
 
