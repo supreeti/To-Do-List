@@ -53,7 +53,7 @@ input[type="checkbox"]:checked + input {
   align-items: center;
 }
 
-.btn {
+.enter {
   border: none;
   background: none;
   outline: none;
@@ -62,15 +62,9 @@ input[type="checkbox"]:checked + input {
 
 .clear {
   text-align: center;
-  background-color: #f6f6f6;
-  cursor: pointer;
-}
-
-.clearText {
-  margin: 0;
-  padding: 15px;
-  color: black;
   background-color: antiquewhite;
+  cursor: pointer;
+  color: black;
 }
 
 .desciption {

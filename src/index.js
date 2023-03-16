@@ -1,5 +1,5 @@
 import './style.css';
-import addTodoItem from './modules/addTodoItem.js';
+import addItem from './modules/addItem.js';
 import deleteTodo from './modules/deleteTodo.js';
 import taskCompleted from './modules/taskCompleted.js';
 import {
@@ -63,12 +63,12 @@ window.completedTodo = (index) => {
   taskCompleted(index);
 };
 
-document.getElementById('allCompleted').addEventListener('click', () => {
+document.getElementById('allCom').addEventListener('click', () => {
   const todos = getTodo();
-  const allCompleted = todos.filter((todo) => !todo.completed);
-  allCompleted.forEach((todo, i) => {
+  const allCom = todos.filter((todo) => !todo.completed);
+  allCom.forEach((todo, i) => {
     todo.index = i;
   });
-  localStorage.setItem('todos', JSON.stringify(allCompleted));
+  localStorage.setItem('todos', JSON.stringify(allCom));
   window.location.reload();
 });

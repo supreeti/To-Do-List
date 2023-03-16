@@ -5,7 +5,6 @@ function checkbox() {
     cb.addEventListener('change', () => {
       if (checkboxes[i].checked) {
         description[i].style.textDecoration = 'line-through';
-        description[i].style.color = '#cacacb';
       } else {
         description[i].style.textDecoration = 'none';
         description[i].style.color = 'black';
@@ -14,7 +13,7 @@ function checkbox() {
   });
 }
 
-const list = document.getElementById('lists');
+const list = document.getElementById('tasklists');
 const addTodoItem = (todo) => {
   list.innerHTML += `
     <li id="${todo.index}" class="listTask">
