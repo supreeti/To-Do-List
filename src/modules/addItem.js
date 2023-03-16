@@ -14,7 +14,7 @@ function checkbox() {
 }
 
 const list = document.getElementById('tasklists');
-const addTodoItem = (todo) => {
+const addItem = (todo) => {
   list.innerHTML += `
     <li id="${todo.index}" class="listTask">
       <div class="listTaskWrapper"><input type="checkbox" name="" class="checkbox" id=check${todo.index} onclick="completedTodo(${todo.index})" ${todo.completed ? 'checked' : ''}></div>
@@ -27,4 +27,4 @@ const addTodoItem = (todo) => {
   checkbox();
 };
 
-export default addTodoItem;
+export default addItem;

@@ -1,4 +1,4 @@
-const getTodo = () => {
+const getlist = () => {
   let todos;
   if (localStorage.getItem('todos') === null) {
     todos = [];
@@ -8,14 +8,14 @@ const getTodo = () => {
   return todos;
 };
 
-const addTodo = (todo) => {
-  const todos = getTodo();
+const addlist = (todo) => {
+  const todos = getlist();
   todos.push(todo);
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-const removeTodo = (index) => {
-  const todos = getTodo();
+const removelist = (index) => {
+  const todos = getlist();
   const deletedTodos = todos.filter((todo) => todo.index !== index);
   deletedTodos.forEach((todo, i) => {
     todo.index = i;
@@ -24,13 +24,13 @@ const removeTodo = (index) => {
   window.location.reload();
 };
 
-const updateTodo = (index, description) => {
-  const todos = getTodo();
+const updatelist = (index, description) => {
+  const todos = getlist();
   const todo = todos.find((todoTask) => todoTask.index === index);
   todo.description = description;
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
 export {
-  getTodo, addTodo, removeTodo, updateTodo,
+  getlist, addlist, removelist, updatelist,
 };

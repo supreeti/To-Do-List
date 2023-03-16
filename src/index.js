@@ -1,13 +1,13 @@
 import './style.css';
 import addItem from './modules/addItem.js';
-import deleteTodo from './modules/deleteTodo.js';
-import taskCompleted from './modules/taskCompleted.js';
+import deleted from './modules/delete.js';
+import taskfinish from './modules/task.js';
 import {
-  addTodo, getTodo, removeTodo, updateTodo,
-} from './modules/storeTodo.js';
+  addlist, getlist, removelist, updatelist,
+} from './modules/store.js';
 
 const display = () => {
-  const todos = getTodo() || [];
+  const todos = getlist() || [];
   if (todos) {
     todos.map((todo) => addTodoItem(todo));
   }
@@ -16,7 +16,7 @@ const display = () => {
 display();
 document.getElementById('form').addEventListener('submit', (e) => {
   e.preventDefault();
-  const todos = getTodo();
+  const todos = getlist();
   const todoInput = document.getElementById('task').value;
   const todoTask = {
     index: todos.length,
@@ -25,8 +25,8 @@ document.getElementById('form').addEventListener('submit', (e) => {
   };
 
   if (todoInput !== '') {
-    addTodoItem(todoTask);
-    addTodo(todoTask);
+    addItem(todoTask);
+    addlist(todoTask);
     document.getElementById('form').reset();
   }
 });
@@ -36,9 +36,9 @@ const inputField = document.querySelectorAll('.description');
 inputField.forEach((todo, index) => {
   todo.addEventListener('change', (e) => {
     const updateInput = e.target.value;
-    const todos = getTodo();
+    const todos = getlist();
     todos[index].description = updateInput;
-    updateTodo(index, todos[index].description);
+    updatelist(index, todos[index].description);
     window.location.reload();
   });
 });
@@ -46,21 +46,21 @@ inputField.forEach((todo, index) => {
   todo.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       const updateInput = e.target.value;
-      const todos = getTodo();
+      const todos = getlist();
       todos[index].desciption = updateInput;
-      updateTodo(index, todos[index].description);
+      updatelist(index, todos[index].description);
       window.location.reload();
     }
   });
 });
 
 window.remove = (index) => {
-  deleteTodo(index);
-  removeTodo(index);
+  deleted(index);
+  removelist(index);
 };
 
 window.completedTodo = (index) => {
-  taskCompleted(index);
+  taskfinish(index);
 };
 
 document.getElementById('allCom').addEventListener('click', () => {

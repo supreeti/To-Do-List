@@ -1,6 +1,6 @@
-import { getTodo } from './storeTodo.js';
+import { getlist } from './store.js';
 
-const taskCompleted = (index) => {
+const taskfinish = (index) => {
   const completed = document.getElementById(`check${index}`).toggleAttribute('checked');
   const todos = getTodo();
 
@@ -8,4 +8,4 @@ const taskCompleted = (index) => {
   localStorage.setItem('todos', JSON.stringify(todos));
 };
 
-export default taskCompleted;
+export default taskfinish;

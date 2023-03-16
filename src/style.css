@@ -43,6 +43,11 @@ input[type="checkbox"]:checked + input {
   padding: 10px;
 }
 
+.listreload {
+  height: 40%;
+  cursor: pointer;
+}
+
 .todo_form {
   border-bottom: 1px solid #f4f5f4;
   padding: 15px;
